@@ -1,5 +1,6 @@
 # Generator App
 This app is composed of micro applications that serve different purposes
+- User will need their own config file
 
 -   Scraper
     -   
