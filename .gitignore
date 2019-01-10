@@ -1,4 +1,4 @@
 .idea
 rethinkdb_data
 venv
-config
+config/user_config.py
