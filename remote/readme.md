@@ -44,5 +44,3 @@ Code in this folder is to be executed on remote systems
                         pop_density: 1563
                     }
                 }
-        
-        

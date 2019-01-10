@@ -18,7 +18,7 @@ class DbModule:
                 self.has_init = True
 
         def connect(self):
-            self.connection = self.rethink.connect("172.17.0.21", 28015).repl()
+            self.connection = self.rethink.connect("localhost", 28015).repl()
 
         def create_tables(self, tables):
             db_tables = self.__get_tables()

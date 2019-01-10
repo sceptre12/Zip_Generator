@@ -1,10 +1,20 @@
 from os import path
 from bs4 import BeautifulSoup
 
-from configs.constants.generator_functions import generate_state_obj_list
-from configs.constants.state_info import StateAcronyms
-from models.zip_objects import ZipCode, StateInfo
+from app.configs.constants.state_info import StateAcronyms, StateName
+from models.zip_objects import ZipCode, StateInfo, State
 from .zip_manager import ZipManager
+
+
+def generate_state_obj_list():
+    state_name_list = list(StateName.__members__)
+    state_acronym_list = list(StateAcronyms.__members__)
+    state_list = {}
+
+    for idx, val in enumerate(state_acronym_list):
+        state_list[val] = State(state_name_list[idx],state_acronym_list[idx])
+    return state_list
+
 
 state_dic = generate_state_obj_list()
 

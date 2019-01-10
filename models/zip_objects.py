@@ -1,4 +1,4 @@
-from configs.constants.generator_functions import get_state_zip_zone, get_state_zip_range
+from app.configs.constants.generator_functions import get_state_zip_zone, get_state_zip_range
 from config.user_config import ZIP_CODE_WEBSITE
 
 
