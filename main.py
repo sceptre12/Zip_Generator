@@ -1,3 +1,18 @@
+import argparse
+import sys
+
+parser = argparse.ArgumentParser(description='Main Application')
+
+parser.add_argument('-s','--server',action='store_true',help='Launching Server',dest='server')
+parser.add_argument('-c','--client',action='store_true',help='Launching Client',dest='client')
+
+
+args = parser.parse_args()
+if args.client is True and args.server is True:
+    print("Cannot run both Client and Server")
+    sys.exit(1)
+if args.server:
+'''
 from sanic import Sanic
 import socketio
 import threading
@@ -30,3 +45,4 @@ def connect(sid,environ):
 if __name__ == "__main__":
     t.start()
     app.run(host="0.0.0.0", port=8084)
+'''

@@ -36,11 +36,9 @@ def populate_db():
     server_state = ServerState()
     db_instance = DbModule()
 
-    print("Hello")
 
     # Populates a Zip Manager Object
     read_in_files(parsers.parse_file)
-    print("hey")
 
     user_tables = server_state.get_user_tables()
     chunk_amount = len(user_tables)
