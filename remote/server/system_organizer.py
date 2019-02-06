@@ -1,21 +1,19 @@
-import os
-
 from numpy import array_split
-from db_storage.db_interface import DbModule
-from remote.remote_config import server_config
+from db_storage import DbModule
+from remote.remote_config import *
 from remote.server.server_state import ServerState
 from app.file_system.access_data import read_in_files
-from app.file_parser import parsers, zip_manager
+from app.scraper.file_parser import parsers
+from models import ZipManager
 
 
 def server_folder_setup():
     '''
         Sets up the server folder system
     '''
-    if os.path.isdir(server_config.MAIN_DIR) is False:
-        os.makedirs(server_config.DB_STORAGE)
-        os.makedirs(server_config.ZIP_HTML)
-        os.makedirs(server_config.ZIP_JSON)
+    if os.path.isdir(SERVER_DIR) is False:
+        os.makedirs(DB_STORAGE)
+        os.makedirs(ZIP_JSON)
 
 
 def set_up_db():
@@ -32,13 +30,12 @@ def populate_db():
         This function reads in and parses the file on the system
         The data is then split into chunks that gets pushed into each user table
     '''
-    z_manager = zip_manager.ZipManager()
+    z_manager = ZipManager()
     server_state = ServerState()
     db_instance = DbModule()
 
-
     # Populates a Zip Manager Object
-    read_in_files(parsers.parse_file)
+    read_in_files(parsers.state_file_parser)
 
     user_tables = server_state.get_user_tables()
     chunk_amount = len(user_tables)
@@ -50,6 +47,7 @@ def populate_db():
         print(idx)
         db_instance.batch_insert(user_table, chunk_list[idx])
 
+    z_manager.clean_up()
 
 
 

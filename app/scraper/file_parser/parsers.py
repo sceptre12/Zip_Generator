@@ -3,7 +3,7 @@ from bs4 import BeautifulSoup
 
 from app.configs.constants.state_info import StateAcronyms, StateName
 from models.zip_objects import ZipCode, StateInfo, State
-from .zip_manager import ZipManager
+from models import ZipManager
 
 
 def generate_state_obj_list():
@@ -19,7 +19,7 @@ def generate_state_obj_list():
 state_dic = generate_state_obj_list()
 
 
-def parse_file(file, file_data):
+def state_file_parser(file, file_data):
     zip_manager = ZipManager()
     state_acronym = StateAcronyms(path.basename(file).split(".")[0].upper())
     soup = BeautifulSoup(file_data, 'html5lib')
@@ -49,6 +49,7 @@ def parse_file(file, file_data):
 
     zip_manager.add_state_info(state_info)
 
+# def zip_file_parser(file,file_data):
 
 
 

@@ -23,7 +23,7 @@ class ServerState:
             return self.user_list
 
         def get_user_info(self, user):
-            return self.user_state[user]
+            return self.user_state[user] if user in self.user_state else None
 
         def set_user_info(self, user, data):
             self.user_state[user] = data

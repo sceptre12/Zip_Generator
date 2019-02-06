@@ -22,6 +22,10 @@ class ZipManager:
 
         def __repr__(self): return self.__str__()
 
+        def clean_up(self):
+            self.zip_codes = []
+            self.stateInfo = []
+
     instance = None
 
     def __init__(self):

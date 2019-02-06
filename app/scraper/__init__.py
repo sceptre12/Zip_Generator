@@ -1,0 +1,1 @@
+from .scraper_main import grab_and_store_data

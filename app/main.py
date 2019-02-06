@@ -1,5 +1,5 @@
 from file_system.access_data import read_in_files
-from file_parser.parsers import parse_file, ZipManager
+from scraper.file_parser import parse_file, ZipManager
 from db_storage.db_init import init_db
 from db_storage.db_interface import DbModule
 

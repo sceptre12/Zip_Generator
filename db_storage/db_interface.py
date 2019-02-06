@@ -1,13 +1,16 @@
 import rethinkdb as r
+from collections import OrderedDict
 
 
 class DbModule:
     class __DbInterface:
-        def __init__(self):
+        def __init__(self,db_connect_url="localhost",db_access_port=28015):
             self.rethink = r
             self.has_init = False
             self.db_name = "friendly_neighbor"
             self.connection = None
+            self.db_connect_url = db_connect_url
+            self.db_access_port = db_access_port
 
         def start(self):
             if not self.has_init:
@@ -18,10 +21,10 @@ class DbModule:
                 self.has_init = True
 
         def connect(self):
-            self.connection = self.rethink.connect("localhost", 28015).repl()
+            self.connection = self.rethink.connect(self.db_connect_url, self.db_access_port).repl()
 
         def create_tables(self, tables):
-            db_tables = self.__get_tables()
+            db_tables = self.get_tables()
             operations = []
             for table in tables:
                 if table not in db_tables:
@@ -32,7 +35,7 @@ class DbModule:
                 self.rethink.expr(operations).run()
 
         def create_table(self, table_name, primary_key=None):
-            if table_name not in self.__get_tables():
+            if table_name not in self.get_tables():
                 self.rethink.table_create(table_name, primary_key=primary_key if primary_key is not None else "").run(self.connection)
 
         def batch_insert(self,table_name, datas):
@@ -47,7 +50,7 @@ class DbModule:
         def has_db_initialized(self):
             return self.has_init
 
-        def __get_tables(self): return self.rethink.table_list().run(self.connection)
+        def get_tables(self): return self.rethink.table_list().run(self.connection)
 
         def __get_dbs(self): return self.rethink.db_list().run(self.connection)
 
@@ -59,3 +62,20 @@ class DbModule:
 
     def __getattr__(self, item):
         return getattr(self.instance,item)
+
+
+class DbQueryHelper:
+    def __init__(self,rethink_ref):
+        self.rethink = rethink_ref
+        self.queries = OrderedDict()
+
+    def add_query(self, attr_name, query):
+        self.queries[attr_name] = query
+
+    def execute(self):
+        result = self.rethink.expr(self.queries.values()).run()
+        index = 0;
+        for key in self.queries:
+            self.queries[key] = result[index]
+            index += 1
+        return self.queries
