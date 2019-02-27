@@ -2,8 +2,8 @@ from numpy import array_split
 from db_storage import DbModule
 from remote.remote_config import *
 from remote.server.server_state import ServerState
-from app.file_system.access_data import read_in_files
-from app.scraper.file_parser import parsers
+from mini_apps.file_system.access_data import read_in_files
+from file_parser import parsers
 from models import ZipManager
 
 

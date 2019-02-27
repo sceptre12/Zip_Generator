@@ -1,7 +1,8 @@
 from os import path
 from bs4 import BeautifulSoup
+from ast import literal_eval
 
-from app.configs.constants.state_info import StateAcronyms, StateName
+from config.constants.state_info import StateAcronyms, StateName
 from models.zip_objects import ZipCode, StateInfo, State
 from models import ZipManager
 
@@ -45,11 +46,30 @@ def state_file_parser(file, file_data):
                            row_list[3] if len(row_list) > 3 else "")
         zip_manager.add_zip(zip_code)
         state_info.add_zip(zip_code)
-        zip_code.add_coords(30,50)
 
     zip_manager.add_state_info(state_info)
 
-# def zip_file_parser(file,file_data):
+
+def zip_file_parser(file,file_data):
+    # db_interface = DbModule()
+    zip_code = path.basename(file).split(".")[0]
+
+    soup = BeautifulSoup(file_data,'html5lib')
+
+    # The html file contains a script tag that holds the zip coordinates
+    script_list = soup.select("script")[1].string.strip().split(" ")
+
+    geo_json = literal_eval((script_list[2][:len(script_list[2]) - 12]))
+
+    coords = geo_json['features'][0]['geometry']['coordinates']
+
+    obj = {
+        'zip_coords' : coords,
+        'bounds' : script_list[4]
+    }
+
+    # Gets Neighboring Zips
+    neighboring_zips = list(map(lambda item: item.text.split(" ")[2], soup.select(".nearby-zips-list")[0].select("ul li div a")))
 
 
 

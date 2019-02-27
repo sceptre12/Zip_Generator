@@ -1,4 +1,4 @@
-from app.configs.constants.state_info import StateAcronyms
+from config.constants.state_info import StateAcronyms
 from config.user_config import ZIP_CODE_WEBSITE
 
 

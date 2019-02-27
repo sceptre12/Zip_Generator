@@ -1,9 +1,10 @@
 import os
 from remote.remote_config import CLIENT_DIR, ZIP_HTML, ZIP_JSON
 from threading import Thread
-from app.scraper.requests import ZipRequester
-from app.file_system.store_data import store_data_to_file
+from mini_apps.scraper.requests import ZipRequester
+from mini_apps.file_system.store_data import store_data_to_file
 from db_storage import DbModule
+from mini_apps.file_system.access_data import read_in_files
 
 
 def client_folder_setup():
@@ -13,6 +14,12 @@ def client_folder_setup():
     if os.path.isdir(CLIENT_DIR) is False:
         os.makedirs(ZIP_HTML)
         os.makedirs(ZIP_JSON)
+
+
+# def store_zip_data():
+
+def handle_zip_dir():
+    read_in_files
 
 
 def launch_client_action(user_info):

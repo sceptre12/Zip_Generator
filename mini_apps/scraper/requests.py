@@ -1,5 +1,4 @@
 import requests
-from remote.remote_config import ZIP_HTML
 from concurrent.futures import ThreadPoolExecutor
 from time import sleep
 
@@ -41,6 +40,7 @@ class ZipRequester(Requester):
         self.cb = cb
 
     def __execute_cb(self,zip_obj):
+        from remote.remote_config import ZIP_HTML
         sleep(18)
         print(zip_obj)
         self.cb(ZIP_HTML, str(zip_obj['zip_code']) + ".html", self.get_data(zip_obj['link']).text)
