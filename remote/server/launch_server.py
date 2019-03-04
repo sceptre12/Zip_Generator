@@ -15,7 +15,7 @@ def server_init(main_var):
 
     server_state = ServerState()
     db_instance = DbModule()
-    z_manager = ZipManager()
+    ZipManager()
 
     def init():
         server_folder_setup()
@@ -31,6 +31,6 @@ def server_init(main_var):
         await sio.emit('user_info', get_user_info(data['user'], server_state, db_instance, sio))
 
     if main_var == "__main__":
-        print("hello")
+        print("Started Server")
         init()
         app.run(host=SERVER_IP, port=8084)

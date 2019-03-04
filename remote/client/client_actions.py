@@ -4,7 +4,7 @@ from threading import Thread
 from mini_apps.scraper.requests import ZipRequester
 from mini_apps.file_system.store_data import store_data_to_file
 from db_storage import DbModule
-from mini_apps.file_system.access_data import read_in_files
+from mini_apps.file_parser.parser_functions import store_zip_parsed_data_into_db
 
 
 def client_folder_setup():
@@ -16,28 +16,20 @@ def client_folder_setup():
         os.makedirs(ZIP_JSON)
 
 
-# def store_zip_data():
-
-def handle_zip_dir():
-    read_in_files
-
-
 def launch_client_action(user_info):
     db_interface = DbModule()
     db_interface.start()
 
     table_name = user_info['table_name']
 
-    zip_links = db_interface.get_rethink_instance().table(table_name).map(lambda doc:
-        {'zip_code': doc['zip_code'],'link': doc['link']}
-    ).run()
+    zip_list = db_interface.get_rethink_instance().table(table_name).run()
 
-    zip_requests = ZipRequester(zip_links)
-
-    zip_requests.set_cb(store_data_to_file)
-    t = Thread(target=zip_requests.store_zip_concurrently, daemon=True)
-    t.start()
-    t.join()
+    # zip_requests = ZipRequester(zip_list)
+    #
+    # zip_requests.set_cb(store_data_to_file)
+    # t = Thread(target=zip_requests.store_zip_concurrently, daemon=True)
+    # t.start()
+    # t.join()
     '''
         At this point I've stored all the data in the users file system
         Need to parse each file. I need to find some way to check each parsed link
@@ -47,5 +39,6 @@ def launch_client_action(user_info):
         report failure to the db, giving the information on the zip that it failed on
         set a timer for 24 hours before script starts concurrently running again 
     '''
+    store_zip_parsed_data_into_db(ZIP_HTML,table_name=table_name,zip_list=zip_list)
 
 

@@ -1,0 +1,45 @@
+{
+  "zip_codes" : [
+    {
+      "zip_code": 235235,
+      "state": "state name",
+      "state_abrv": "state_abbreviation",
+      "city": "city",
+      "county": "county",
+      "bounding_coords":[],
+      "bordering_zips": [
+        3453345,
+        124124,
+        125235
+      ]
+    }
+  ],
+  "communities": [
+    {
+      "id": "unique id",
+      "zip_code" : 235235,
+      "boundary_coordinates" : [
+          [4 ,5],
+          [123,534],
+          [234,2535]
+        ],
+        "neighboring_communities": [
+          "unique_id's"
+        ],
+        "users": [
+          "account_id1"
+        ]
+    }
+  ],
+  "user_accounts": [
+    {
+      "account_id1": "unique id",
+      "name": "Xavier Thomas",
+      "address" : "Address",
+      "gps_coordinates": "gps_coordinates",
+      "communities" :[
+
+      ]
+    }
+  ]
+}

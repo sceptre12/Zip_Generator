@@ -16,6 +16,7 @@ rethinkdb = "==2.3.0.post6"
 six = "==1.12.0"
 urllib3 = "==1.24.1"
 webencodings = "==0.5.1"
+pylint = "*"
 
 [requires]
 python_version = "3.7"

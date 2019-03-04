@@ -8,7 +8,7 @@ def __group_region_by_zip_start(accum, curr):
     index = ZIP_ZONES[curr]
     if accum[index] is None:
         accum[index] = []
-    accum[index].append(curr);
+    accum[index].append(curr)
     return accum
 
 

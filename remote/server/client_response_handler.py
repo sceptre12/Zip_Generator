@@ -2,6 +2,7 @@ from db_storage import DbQueryHelper
 
 
 def get_user_info(user, server_state, db_interface, sio):
+    user_info = None
     if server_state.get_user_info(user) is not None:
         user_info = server_state.get_user_info(user)
         query_helper = DbQueryHelper(db_interface.get_rethink_instance())
@@ -15,4 +16,4 @@ def get_user_info(user, server_state, db_interface, sio):
         user_info['start_zip'] = result['start_zip']
         user_info['end_zip'] = result['end_zip']
 
-        return user_info
+    return user_info

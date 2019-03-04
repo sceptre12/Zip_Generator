@@ -38,9 +38,6 @@ class DbModule:
             if table_name not in self.get_tables():
                 self.rethink.table_create(table_name, primary_key=primary_key if primary_key is not None else "").run(self.connection)
 
-        def batch_insert(self,table_name, datas):
-            self.rethink.table(table_name).insert(datas).run(self.connection)
-
         def insert(self, table_name, data):
             self.rethink.table(table_name).insert(data).run(self.connection)
 
@@ -49,6 +46,15 @@ class DbModule:
 
         def has_db_initialized(self):
             return self.has_init
+
+        def filter_w_criteria(self,table_name,criteria):
+            return self.rethink.table(table_name).filter(criteria).run(self.connection)
+
+        def get_val(self, table_name, id):
+            return self.rethink.table(table_name).get(id).run(self.connection)
+
+        def get_all(self,table_name, value_to_get,index=None):
+            return self.rethink.table(table_name).get_all(value_to_get, index=index).run(self.connection)
 
         def get_tables(self): return self.rethink.table_list().run(self.connection)
 
@@ -74,7 +80,7 @@ class DbQueryHelper:
 
     def execute(self):
         result = self.rethink.expr(self.queries.values()).run()
-        index = 0;
+        index = 0
         for key in self.queries:
             self.queries[key] = result[index]
             index += 1

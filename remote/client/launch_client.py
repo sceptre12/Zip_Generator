@@ -17,8 +17,14 @@ def client_init(user):
 
     @sio.on('user_info')
     def get_user_info(data):
-        client_state.set_user_info(data)
-        launch_client_action(data)
+        if data is not None:
+            client_state.set_user_info(data)
+            launch_client_action(data)
+        else:
+            import sys
+            print("User does not exist")
+            sio.disconnect()
+            sys.exit(1)
 
     sio.connect(SERVER_URL + ":" + str(SERVER_PORT))
     sio.wait()

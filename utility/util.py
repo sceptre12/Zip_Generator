@@ -41,4 +41,4 @@ def is_point_wrapper(args):
 
 def get_simplicies(triangle_coordinates):
     from scipy.spatial import Delaunay
-    return Delaunay(triangle_coordinates).simplicies
+    return Delaunay(triangle_coordinates).simplices
