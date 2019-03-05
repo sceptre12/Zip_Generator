@@ -56,22 +56,27 @@ def zip_file_parser(file,file_data,**kwargs):
     db_interface = DbModule()
 
     zip_code = int(path.basename(file).split(".")[0])
-    soup = BeautifulSoup(file_data, 'html5lib')
-
-    # Checks to see if this is a failed zip retrevial
-    if soup.find("meta") is None:
-        db_interface.insert("failed_zips",zip_code)
 
     table_name = None
     zip_obj = None
 
+    # Checks to See if the params have been populated
     for key, value in kwargs.items():
         if key is "table_name":
             table_name = value
         if key is "zip_list":
-            zip_obj = list(filter(lambda zip: int(zip["zip_code"]) == zip_code, value))[0]
+            zip_obj = list(filter(lambda item: int(item["zip_code"]) == zip_code, value))[0]
 
-    if table_name is None and zip_obj is None: return None
+    if table_name is None and zip_obj is None:
+        return
+
+    # Checks to ensure that this is a valid html file
+    soup = BeautifulSoup(file_data, 'html5lib')
+
+    # Checks to see if this is a failed zip retrieval
+    if soup.find("meta") is None:
+        db_interface.insert("failed_zips", {"zip_code": zip_code, "issue": "no html"})
+        return
 
     # The html file contains a script tag that holds the zip coordinates
     script_list = soup.select("script")[1].string.strip().split(" ")
@@ -83,20 +88,23 @@ def zip_file_parser(file,file_data,**kwargs):
     coord_boundaries = script_list[4]
 
     # Gets Neighboring Zips
-    neighboring_zips = list(map(lambda item: item.text.split(" ")[2], soup.select(".nearby-zips-list")[0].select("ul li div a")))
+    neighboring_zips = []
+    if soup.find(".nearby-zips-list"):
+        neighboring_zips = list(map(lambda item: item.text.split(" ")[2], soup.select(".nearby-zips-list")[0].select("ul li div a")))
 
     # Batch inserts communites
-    # db_interface.insert("communities",Communities(zip_code,zip_coords).get_json())
-    #
-    # db_interface.insert("zip_codes",{
-    #     "zip_code": zip_obj['zip_code'],
-    #     "state": zip_obj["state"].split(" ")[0],
-    #     "state_abrv": zip_obj["state"].split(" ")[1],
-    #     "city": zip_obj["city"],
-    #     "county": zip_obj["county"],
-    #     "bordering_zips": neighboring_zips,
-    #     "bounding_coords": coord_boundaries
-    # })
+    db_interface.insert("communities",Communities(zip_code,zip_coords).get_json())
+
+    db_interface.insert("zip_codes",{
+        "zip_code": zip_code,
+        "state": zip_obj["state"].split(" ")[0],
+        "state_abrv": zip_obj["state"].split(" ")[1],
+        "city": zip_obj["city"],
+        "county": zip_obj["county"],
+        "zip_coords": zip_coords,
+        "bordering_zips": neighboring_zips,
+        "bounding_coords": coord_boundaries
+    })
 
 
 

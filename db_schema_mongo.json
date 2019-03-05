@@ -7,6 +7,7 @@
       "city": "city",
       "county": "county",
       "bounding_coords":[],
+      "zip_coords": [],
       "bordering_zips": [
         3453345,
         124124,

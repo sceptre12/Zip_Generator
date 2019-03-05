@@ -21,7 +21,7 @@ def store_zip_parsed_data_into_db(path,table_name,zip_list):
     db.start()
 
     db.create_table("zip_codes","zip_code")
-    db.create_table("communities")
+    db.create_table("communities","id")
     db.create_table("failed_zips","zip_code")
 
     read_in_files(zip_file_parser, path, table_name=table_name, zip_list=zip_list)

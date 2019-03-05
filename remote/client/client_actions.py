@@ -22,7 +22,11 @@ def launch_client_action(user_info):
 
     table_name = user_info['table_name']
 
-    zip_list = db_interface.get_rethink_instance().table(table_name).run()
+    zip_list = []
+    cursor = db_interface.get_rethink_instance().table(table_name).run()
+
+    for item in cursor:
+        zip_list.append(item)
 
     # zip_requests = ZipRequester(zip_list)
     #
