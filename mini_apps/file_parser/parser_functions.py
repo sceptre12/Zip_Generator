@@ -24,6 +24,9 @@ def store_zip_parsed_data_into_db(path,table_name,zip_list):
     db.create_table("communities","id")
     db.create_table("failed_zips","zip_code")
 
+    db.get_rethink_instance().table("communities").index_create("simplicy_index").run()
+    db.get_rethink_instance().table("communities").index_wait().run()
+
     read_in_files(zip_file_parser, path, table_name=table_name, zip_list=zip_list)
 
 

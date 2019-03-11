@@ -65,9 +65,11 @@ def zip_file_parser(file,file_data,**kwargs):
         if key is "table_name":
             table_name = value
         if key is "zip_list":
-            zip_obj = list(filter(lambda item: int(item["zip_code"]) == zip_code, value))[0]
+            filtered_zip = list(filter(lambda item: int(item["zip_code"]) == zip_code, value))
+            zip_obj = filtered_zip[0] if len(filtered_zip) == 1 else None
 
-    if table_name is None and zip_obj is None:
+    if table_name is None or zip_obj is None:
+        db_interface.insert("failed_zips", {"zip_code": zip_code, "issue": "html not part of zip_list"})
         return
 
     # Checks to ensure that this is a valid html file
@@ -83,6 +85,11 @@ def zip_file_parser(file,file_data,**kwargs):
 
     geo_json = literal_eval((script_list[2][:len(script_list[2]) - 12]))
 
+    polygon_type = geo_json['features'][0]['geometry']["type"]
+    if polygon_type == "MultiPolygon":
+        db_interface.insert("failed_zips", {"zip_code": zip_code, "issue": "MultiPolygon"})
+        return
+
     zip_coords = geo_json['features'][0]['geometry']['coordinates'][0]
 
     coord_boundaries = script_list[4]
@@ -92,8 +99,10 @@ def zip_file_parser(file,file_data,**kwargs):
     if soup.find(".nearby-zips-list"):
         neighboring_zips = list(map(lambda item: item.text.split(" ")[2], soup.select(".nearby-zips-list")[0].select("ul li div a")))
 
+    communities_obj = Communities(zip_code,zip_coords);
+
     # Batch inserts communites
-    db_interface.insert("communities",Communities(zip_code,zip_coords).get_json())
+    db_interface.insert("communities",communities_obj.get_json())
 
     db_interface.insert("zip_codes",{
         "zip_code": zip_code,
@@ -105,6 +114,13 @@ def zip_file_parser(file,file_data,**kwargs):
         "bordering_zips": neighboring_zips,
         "bounding_coords": coord_boundaries
     })
+
+    # for index,community in enumerate(communities_obj.communities):
+    #     print(communities_obj.tri.neighbors[index])
+    #     print(community.get_json())
+    #     quit()
+
+
 
 
 

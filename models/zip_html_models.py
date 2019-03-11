@@ -6,10 +6,8 @@ from utility.util import is_point_inside_triangle
 class Communities(JsonFormatter):
     def __init__(self,zip_code,zip_coords):
         from scipy.spatial import Delaunay
-        print(zip_code)
-        print(zip_coords)
-        tri = Delaunay(zip_coords)
-        self.communities = [Community(zip_code,zip_coords,simplices,index) for index, simplices in enumerate(tri.simplices)]
+        self.tri = Delaunay(zip_coords)
+        self.communities = [Community(zip_code,zip_coords,simplices,index) for index, simplices in enumerate(self.tri.simplices)]
 
     def get_json(self):
         return [community.get_json() for community in self.communities]
@@ -17,9 +15,9 @@ class Communities(JsonFormatter):
 
 class Community(JsonFormatter):
     def __init__(self,zip_code,zip_coords, simplices,index):
-        self.id = ""
         self.zip_code = zip_code
         self.simplicy_index = index
+        self.simplicy = simplices
         self.boundary_coordinates = list(map(lambda idx: zip_coords[idx],simplices))
         self.neighboring_communities = []
         self.users = []

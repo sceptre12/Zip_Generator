@@ -36,7 +36,7 @@ class DbModule:
 
         def create_table(self, table_name, primary_key=None):
             if table_name not in self.get_tables():
-                self.rethink.table_create(table_name, primary_key=primary_key if primary_key is not None else "").run(self.connection)
+                self.rethink.table_create(table_name, primary_key=primary_key if primary_key is not None else "id").run(self.connection)
 
         def insert(self, table_name, data):
             self.rethink.table(table_name).insert(data).run(self.connection)
