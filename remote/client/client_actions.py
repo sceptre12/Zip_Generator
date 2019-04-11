@@ -28,12 +28,12 @@ def launch_client_action(user_info):
     for item in cursor:
         zip_list.append(item)
 
-    # zip_requests = ZipRequester(zip_list)
-    #
-    # zip_requests.set_cb(store_data_to_file)
-    # t = Thread(target=zip_requests.store_zip_concurrently, daemon=True)
-    # t.start()
-    # t.join()
+    zip_requests = ZipRequester(zip_list)
+
+    zip_requests.set_cb(store_data_to_file)
+    t = Thread(target=zip_requests.store_zip_concurrently, daemon=True)
+    t.start()
+    t.join()
     '''
         At this point I've stored all the data in the users file system
         Need to parse each file. I need to find some way to check each parsed link

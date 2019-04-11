@@ -3,3 +3,4 @@ rethinkdb_data
 venv
 config/user_config.py
 **__pycache__
+db_dump

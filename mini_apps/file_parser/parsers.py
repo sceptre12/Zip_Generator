@@ -115,15 +115,4 @@ def zip_file_parser(file,file_data,**kwargs):
         "bounding_coords": coord_boundaries
     })
 
-    # for index,community in enumerate(communities_obj.communities):
-    #     print(communities_obj.tri.neighbors[index])
-    #     print(community.get_json())
-    #     quit()
-
-
-
-
-
-
-
 
